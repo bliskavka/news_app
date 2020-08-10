@@ -9,13 +9,28 @@ data class News(@SerializedName("title") val title: String,
                 @SerializedName("click_url") val clickUrl: String,
                 @SerializedName("time") val time: String,
                 @SerializedName("top") val top: Int,
-                @SerializedName("img") var imgUrl: String = "",
-                var img: Bitmap? = null){
+                @SerializedName("img") val imgUrl: String?,
+                var imgBitmap: Bitmap? = null){
 
 
 }
 
-enum class Type(val title: String){
+enum class Type(){
     //TODO add strings to resources
-    FAVOURITES ("Favourites"), VIDEO ("Video"), STORIES("Stories")
+
+    @SerializedName("favourites")
+    FAVOURITES () {
+        override fun toString(): String = "Favourites"
+    },
+
+    @SerializedName("video")
+    VIDEO {
+        override fun toString(): String = "Video"
+    },
+
+    @SerializedName("strories")
+    STORIES {
+        override fun toString(): String = "Stories"
+    };
 }
+
