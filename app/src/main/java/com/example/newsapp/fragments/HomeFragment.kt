@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import com.example.newsapp.R
 import com.example.newsapp.adapters.HomeTabsViewPagerAdapter
 import com.example.newsapp.entities.Type
@@ -23,7 +25,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.title = getString(R.string.news_title)
 
         viewPager.adapter = HomeTabsViewPagerAdapter(this)
         TabLayoutMediator(tabLayout, viewPager){ tab, position ->

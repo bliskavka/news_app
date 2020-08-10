@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/homepageFragment"
         android:name="com.example.newsapp.fragments.HomeFragment"
-        android:label="fragment_homepage"
+        android:label="@string/news_title"
         tools:layout="@layout/fragment_homepage" />
 </navigation>
