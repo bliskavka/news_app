@@ -1,37 +1,33 @@
 package com.example.newsapp.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.R
-import com.example.newsapp.adapters.HomeTabsViewPagerAdapter
+import com.example.newsapp.adapters.NewsRecyclerViewAdapter
 import com.example.newsapp.entities.News
 import com.example.newsapp.entities.Type
-import com.example.newsapp.repositories.NewsRepository
-import com.example.newsapp.repositories.RepositoryProvider
 import com.example.newsapp.viewmodels.MainActivityViewModel
 import com.example.newsapp.viewmodels.NewsCallback
+import kotlinx.android.synthetic.main.fragment_news.*
 
 private const val ARG_TYPE = "position"
 
-class HomeTabFragment : Fragment() {
+class TabPlaceholderFragment : Fragment() {
 
     private lateinit var viewModel: MainActivityViewModel
     private val TAG = "HomeTabFragment"
+    private var adapter: NewsRecyclerViewAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_news_stories, container, false)
+        return inflater.inflate(R.layout.fragment_news, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,6 +35,10 @@ class HomeTabFragment : Fragment() {
 
         // Passing requireActivity() as lifecycle owner, so not to initialise new viewModel for each fragment
         viewModel = ViewModelProviders.of(requireActivity()).get(MainActivityViewModel::class.java)
+
+        adapter = NewsRecyclerViewAdapter(context)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
 
         arguments?.takeIf { it.containsKey(ARG_TYPE) }?.apply {
             when (getSerializable(ARG_TYPE)) {
@@ -48,9 +48,11 @@ class HomeTabFragment : Fragment() {
             }
         }
     }
+
     private fun setUpForStories() {
         viewModel.setStoriesRetrieveListener(object : NewsCallback.Stories{
             override fun onRetrieved(news: List<News>) {
+                adapter?.update(news)
             }
         })
 
@@ -59,6 +61,7 @@ class HomeTabFragment : Fragment() {
     private fun setUpForVideo() {
         viewModel.setVideoRetrieveListener(object : NewsCallback.Video{
             override fun onRetrieved(news: List<News>) {
+                adapter?.update(news)
             }
         })
     }
@@ -66,6 +69,7 @@ class HomeTabFragment : Fragment() {
     private fun setUpForFavourites() {
         viewModel.setFavouritesRetrieveListener(object : NewsCallback.Favourites{
             override fun onRetrieved(news: List<News>) {
+                adapter?.update(news)
             }
         })
     }

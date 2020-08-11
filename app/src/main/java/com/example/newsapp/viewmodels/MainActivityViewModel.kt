@@ -18,12 +18,19 @@ class MainActivityViewModel : ViewModel() {
     private val favouritesList = ArrayList<News>()
 
     init {
+        //TODO clear observer
         repository.getAllNews()
             .observeForever {
+
                 for (item in it) {
-                    if (item.type == (Type.STORIES)) storiesList.add(item)
-                    if (item.type == (Type.VIDEO)) videoList.add(item)
-                    if (item.type == (Type.FAVOURITES)) favouritesList.add(item)
+                    if (item.type == (Type.STORIES))
+                        storiesList.indexOf(item).let {if (it == -1) storiesList.add(item) else storiesList.set(it, item)}
+
+                    if (item.type == (Type.VIDEO))
+                        videoList.indexOf(item).let {if (it == -1) videoList.add(item) else videoList.set(it, item)}
+
+                    if (item.type == (Type.FAVOURITES))
+                        favouritesList.indexOf(item).let {if (it == -1) favouritesList.add(item) else favouritesList.set(it, item)}
                 }
                 storiesCallback?.onRetrieved(storiesList)
                 videoCallback?.onRetrieved(videoList)
